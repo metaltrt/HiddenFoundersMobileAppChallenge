@@ -18,21 +18,20 @@ public class MainPresenter extends Presenter<MainView> {
     }
 
     public void loadRepos(int page){
-        githubAPI.getRepos("",page)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .doOnNext(repos -> loading=getView().showLoading())
-                .filter(repos -> !loading)
-                .subscribe(repos -> {
+        if(!loading) {
+            loading=getView().showLoading();
+            githubAPI.getRepos("created:>2018-03-07", page)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(repos -> {
+                        loading = getView().hideLoading();
+                        getView().addRepos(repos.getItems());
 
-                    loading=getView().hideLoading();
-                    getView().addRepos(repos.getItems());
+                    }, throwable -> {
+                        loading = getView().hideLoading();
+                        getView().showError(throwable.getMessage());
 
-                }, throwable -> {
-
-                    loading=getView().hideLoading();
-                    getView().showError(throwable.getMessage());
-
-                });
+                    });
+        }
     }
 }

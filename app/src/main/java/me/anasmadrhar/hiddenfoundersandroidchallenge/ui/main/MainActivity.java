@@ -50,6 +50,12 @@ public class MainActivity extends AppCompatActivity implements MainView {
         //Setup swipe to refresh layout.
         setupSwipeToRefresh();
 
+        //get First page.
+        presenter.loadRepos(1);
+
+
+
+
     }
 
 
@@ -71,10 +77,12 @@ public class MainActivity extends AppCompatActivity implements MainView {
      * setup endless scrolling in recycler view to fetch more data when reaching bottom of the list.
      */
     private void setupScrollListener() {
+        linearLayoutManager=new LinearLayoutManager(this);
         scrollListener=new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                presenter.loadRepos(page);
+
+                presenter.loadRepos(page+1);
             }
         };
     }
@@ -83,7 +91,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
      * Setup Recycler View
      */
     private void setupRecyclerView() {
-        linearLayoutManager=new LinearLayoutManager(this);
         adapter=new ReposListAdapter();
         reposRecyclerView.setAdapter(adapter);
         reposRecyclerView.setLayoutManager(linearLayoutManager);
@@ -93,30 +100,36 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public boolean showLoading() {
-        progressDialog=new ProgressDialog(this);
-        progressDialog.show();
+//        progressDialog=new ProgressDialog(this);
+//        progressDialog.show();
+        swipeRefreshLayout.setRefreshing(true);
         return true;
     }
 
 
     @Override
     public boolean hideLoading() {
-        if (progressDialog!=null)progressDialog.hide();
+//        if (progressDialog!=null)progressDialog.hide();
+        swipeRefreshLayout.setRefreshing(false);
         return false;
     }
 
     @Override
     public void showError(int resId) {
         Toast.makeText(this,resId,Toast.LENGTH_LONG).show();
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void showError(String message) {
         Toast.makeText(this,message,Toast.LENGTH_LONG).show();
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void addRepos(List<Repo> repos) {
         adapter.addRepos(repos);
+        adapter.notifyDataSetChanged();
+        swipeRefreshLayout.setRefreshing(false);
     }
 }
