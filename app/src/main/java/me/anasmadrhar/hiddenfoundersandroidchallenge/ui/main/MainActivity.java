@@ -106,12 +106,12 @@ public class MainActivity extends AppCompatActivity implements MainView {
     }
 
     @Override
-    public void onError(int resId) {
+    public void showError(int resId) {
         Toast.makeText(this,resId,Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void onError(String message) {
+    public void showError(String message) {
         Toast.makeText(this,message,Toast.LENGTH_LONG).show();
     }
 

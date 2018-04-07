@@ -24,13 +24,13 @@ public interface View {
      * show an error message
      * @param resId : message resource id
      */
-    void onError(@StringRes int resId);
+    void showError(@StringRes int resId);
 
     /**
      * show an error message
      * @param message: string message id
      */
-    void onError(String message);
+    void showError(String message);
 
 
 }

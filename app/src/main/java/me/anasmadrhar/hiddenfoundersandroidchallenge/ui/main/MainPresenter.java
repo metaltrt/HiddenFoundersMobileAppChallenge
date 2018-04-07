@@ -31,7 +31,7 @@ public class MainPresenter extends Presenter<MainView> {
                 }, throwable -> {
 
                     loading=getView().hideLoading();
-                    getView().showMessage(throwable.getMessage());
+                    getView().showError(throwable.getMessage());
 
                 });
     }
