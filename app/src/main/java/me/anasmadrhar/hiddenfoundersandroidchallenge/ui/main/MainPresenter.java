@@ -3,6 +3,7 @@ package me.anasmadrhar.hiddenfoundersandroidchallenge.ui.main;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.anasmadrhar.hiddenfoundersandroidchallenge.api.GithubAPI;
+import me.anasmadrhar.hiddenfoundersandroidchallenge.helper.Utils;
 import me.anasmadrhar.hiddenfoundersandroidchallenge.ui.base.Presenter;
 
 /**
@@ -20,7 +21,7 @@ public class MainPresenter extends Presenter<MainView> {
     public void loadRepos(int page){
         if(!loading) {
             loading=getView().showLoading();
-            githubAPI.getRepos("created:>2018-03-07", page)
+            githubAPI.getRepos(Utils.getLastMonthQuery(), page)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe(repos -> {
